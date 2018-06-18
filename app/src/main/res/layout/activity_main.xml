@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    >
-
+    android:background="@color/black"
+    tools:context=".MainActivity">
 
 
     <ProgressBar
         android:id="@+id/loading_bars_overview_progress"
         android:layout_width="50dp"
-        android:layout_height="match_parent"
+        android:layout_height="495dp"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="181dp"
+        tools:layout_editor_absoluteY="194dp" />
+
     <ListView
         android:id="@+id/bars_overview_list"
         android:layout_width="wrap_content"
