@@ -13,9 +13,7 @@
         android:layout_width="50dp"
         android:layout_height="495dp"
         android:layout_gravity="center"
-        android:visibility="gone"
-        tools:layout_editor_absoluteX="181dp"
-        tools:layout_editor_absoluteY="194dp" />
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/bars_overview_list"

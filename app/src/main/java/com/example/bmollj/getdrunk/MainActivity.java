@@ -36,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ProgressBar progressBar;
-    private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639&radius=500&type=bar";
+    private String GOOGLE_PLACES_API_RADIUS = "&radius=2000";
+    private static final String GOOGLE_PLACES_API_TYPE ="&type=bar";
+    private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639";
     private static final String GOOGLE_PLACES_API_KEY = "?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs";
     private static final String GOOGLE_PLACES_API_NEARBYSEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.loading_bars_overview_progress);
         progressBar.setVisibility(View.VISIBLE);
-        getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION);
+        getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION +GOOGLE_PLACES_API_RADIUS + GOOGLE_PLACES_API_TYPE);
 
 
 
