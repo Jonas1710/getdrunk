@@ -22,16 +22,31 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.bmollj.getdrunk.helper.BarJsonParser;
+import com.example.bmollj.getdrunk.model.Bar;
+
+import org.json.JSONException;
+
 public class MainActivity extends AppCompatActivity {
 
 
     private ProgressBar progressBar;
+    private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639&radius=500&type=bar";
+    private static final String GOOGLE_PLACES_API_KEY = "?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs";
+    private static final String GOOGLE_PLACES_API_NEARBYSEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.loading_bars_overview_progress);
         progressBar.setVisibility(View.VISIBLE);
+        getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION);
 
-        addBarsToList();
+
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,25 +79,43 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void addBarsToList() {
-        ListView bars = findViewById(R.id.bars_overview_list);
-        //ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
-        //barAdapter.addAll(BadiDao.getAll());
-        //bars.setAdapter(barAdapter);
 
-        AdapterView.OnItemClickListener mListClickedHandler = new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), Detail.class);
-                //Bar selected = (Bar)parent.getItemAtPosition(position);
-                //intent.putExtra("barId", selected.getId());
-                //intent.putExtra("barName", selected.getName());
-                startActivity(intent);
-            }
-        };
-        bars.setOnItemClickListener(mListClickedHandler);
+
+
+
+    private void addBarsToList(){
+        ListView bar = findViewById(R.id.bars_overview_list);
+        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
+        barAdapter.addAll();
+        bar.setAdapter(barAdapter);
     }
 
 
+    private void getBarInfo(String url) {
+        final ArrayAdapter<Bar> barInfosAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Bar bar = BarJsonParser.createBarFromJsonString(response);
+                            barInfosAdapter.addAll(bar);
+                            ListView barInfoList = findViewById(R.id.bars_overview_list);
+                            barInfoList.setAdapter(barInfosAdapter);
+                            progressBar.setVisibility(View.GONE);
+                        } catch (JSONException e) {
+                            generateAlertDialog();
+                        }
+
+                    }             }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                generateAlertDialog();         }     });
+
+        queue.add(stringRequest);
+    }
 
     private void generateAlertDialog() {
         progressBar.setVisibility(View.GONE);
