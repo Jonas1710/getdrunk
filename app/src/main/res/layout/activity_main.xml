@@ -7,13 +7,13 @@
     android:background="@color/black"
     tools:context=".MainActivity">
 
-
     <ProgressBar
         android:id="@+id/loading_bars_overview_progress"
         android:layout_width="50dp"
         android:layout_height="495dp"
         android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+         />
 
     <ListView
         android:id="@+id/bars_overview_list"
