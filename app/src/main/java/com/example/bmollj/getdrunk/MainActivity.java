@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -40,13 +42,19 @@ import com.android.volley.toolbox.Volley;
 import com.example.bmollj.getdrunk.helper.BarJsonParser;
 import com.example.bmollj.getdrunk.model.Bar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
 
     private ProgressBar progressBar;
-    private String GOOGLE_PLACES_API_RADIUS = "&radius=2000";
+    private List<Bar> bars = new ArrayList<>();
+    private String GOOGLE_PLACES_API_RADIUS = "&radius=";
     private static final String GOOGLE_PLACES_API_TYPE ="&type=bar";
     private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639";
     private static final String GOOGLE_PLACES_API_KEY = "?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs";
@@ -58,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.loading_bars_overview_progress);
         progressBar.setVisibility(View.VISIBLE);
+        String radius = "2000";
+        GOOGLE_PLACES_API_RADIUS += radius;
         getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION +GOOGLE_PLACES_API_RADIUS + GOOGLE_PLACES_API_TYPE);
 
 
@@ -72,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -81,18 +92,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void addBarsToList(){
-        ListView barsList = findViewById(R.id.bars_overview_list);
-        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext() , android.R.layout.simple_list_item_1);
-
+        ListView bar = findViewById(R.id.bars_overview_list);
+        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
         barAdapter.addAll();
-
-        for(int i=0; i<barsList.getChildCount(); i++){
-
-        }
-        barsList.setAdapter(barAdapter);
-
+        bar.setAdapter(barAdapter);
     }
 
 
@@ -116,15 +120,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        final ListView barInfoList = findViewById(R.id.bars_overview_list);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Bar bar = BarJsonParser.createBarFromJsonString(response);
-                            barInfosAdapter.addAll(bar);
-                            ListView barInfoList = findViewById(R.id.bars_overview_list);
+                            List<Bar> bars = BarJsonParser.createBarFromJsonString(response);
+                            barInfosAdapter.addAll(bars);
                             barInfoList.setAdapter(barInfosAdapter);
                             progressBar.setVisibility(View.GONE);
                         } catch (JSONException e) {
@@ -137,6 +141,21 @@ public class MainActivity extends AppCompatActivity {
                 generateAlertDialog();         }     });
 
         queue.add(stringRequest);
+
+        AdapterView.OnItemClickListener mListClickedHandler = new
+                AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView parent, View v, int position, long id) {
+                        Intent intent = new Intent(getApplicationContext(), Detail.class);
+                        Bar selected = (Bar) parent.getItemAtPosition(position);
+                        intent.putExtra("id", selected.getId());
+                        intent.putExtra("name", selected.getName());
+                        intent.putExtra("bewertung", selected.getBewertung());
+
+                        startActivity(intent);
+                    }
+                };
+
+        barInfoList.setOnItemClickListener(mListClickedHandler);
     }
 
     private void generateAlertDialog() {

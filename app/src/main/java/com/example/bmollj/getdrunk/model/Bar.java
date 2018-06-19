@@ -1,12 +1,12 @@
 package com.example.bmollj.getdrunk.model;
 
 public class Bar {
-    private int id;
+    private String id;
     private String name;
     private boolean isOpen;
     private int oeffnungZeit;
     private int schliessungsZeit;
-    private double bewertung;
+    private float bewertung;
     private int entfernung;
     //TODO
     //Standort und Bild hinzufügen
@@ -15,7 +15,7 @@ public class Bar {
     public Bar() {
     }
 
-    public Bar(int id, String name, boolean isOpen, int oeffnungZeit, int schliessungsZeit, double bewertung, int entfernung) {
+    public Bar(String id, String name, boolean isOpen, int oeffnungZeit, int schliessungsZeit, float bewertung, int entfernung) {
         this.id = id;
         this.name = name;
         this.isOpen = isOpen;
@@ -38,11 +38,11 @@ public class Bar {
                 '}';
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,11 +78,11 @@ public class Bar {
         this.schliessungsZeit = schliessungsZeit;
     }
 
-    public double getBewertung() {
+    public float getBewertung() {
         return bewertung;
     }
 
-    public void setBewertung(double bewertung) {
+    public void setBewertung(float bewertung) {
         this.bewertung = bewertung;
     }
 

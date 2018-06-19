@@ -22,8 +22,8 @@ public class BarJsonParser {
             Bar bar = new Bar();
             JSONObject obj = results.getJSONObject(i);
             bar.setName(obj.getString("name"));
-           /* bar.setId(Integer.parseInt(obj.getString("id")));
-            bar.setBewertung(Double.parseDouble(obj.getString("rating")));*/
+//            bar.setId(obj.getString("id"));
+//            bar.setBewertung(Float.parseFloat(obj.getString("rating")));
            bars.add(bar);
         }
 
