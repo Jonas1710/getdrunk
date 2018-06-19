@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -80,21 +82,39 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
     private void addBarsToList(){
-        ListView bar = findViewById(R.id.bars_overview_list);
-        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
+        ListView barsList = findViewById(R.id.bars_overview_list);
+        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext() , android.R.layout.simple_list_item_1);
+
         barAdapter.addAll();
-        bar.setAdapter(barAdapter);
+
+        for(int i=0; i<barsList.getChildCount(); i++){
+
+        }
+        barsList.setAdapter(barAdapter);
+
     }
 
 
     private void getBarInfo(String url) {
-        final ArrayAdapter<Bar> barInfosAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
+        //Infos Adapter Initialisieren
+        final ArrayAdapter<Bar> barInfosAdapter = new ArrayAdapter<Bar>(getApplicationContext(), android.R.layout.simple_list_item_1){
+            //Farbe der Schrift auf Weiss setzen
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent){
+                // Get the Item from ListView
+                View view = super.getView(position, convertView, parent);
+
+                // Initialize a TextView for ListView each Item
+                TextView bar = view.findViewById(android.R.id.text1);
+
+                // Set the text color of TextView (ListView Item)
+                bar.setTextColor(Color.WHITE);
+
+                // Generate ListView Item using TextView
+                return view;
+            }
+        };
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
