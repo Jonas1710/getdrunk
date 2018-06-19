@@ -1,36 +1,22 @@
 package com.example.bmollj.getdrunk;
 
 
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Parcelable;
-import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -41,10 +27,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.bmollj.getdrunk.helper.BarJsonParser;
 import com.example.bmollj.getdrunk.model.Bar;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
 
-import org.json.JSONArray;
+
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,12 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ProgressBar progressBar;
+    private ImageView imageView;
+    private GeoDataClient mGeoDataClient;
     private List<Bar> bars = new ArrayList<>();
+    private Bar bar = new Bar();
+    private List<PlacePhotoMetadata> photoDataList;
+    private int currentPotoIndex = 0;
     private String GOOGLE_PLACES_API_RADIUS = "&radius=";
     private static final String GOOGLE_PLACES_API_TYPE ="&type=bar";
     private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639";
     private static final String GOOGLE_PLACES_API_KEY = "?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs";
     private static final String GOOGLE_PLACES_API_NEARBYSEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+    private static final String GOOGLE_PLACES_API_PICTURES = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs&maxwidth=400&maxheight=400&photoreference=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +85,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void addBarsToList(){
-        ListView bar = findViewById(R.id.bars_overview_list);
-        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1);
-        barAdapter.addAll();
-        bar.setAdapter(barAdapter);
-    }
+
+//    private void getPhoto(PlacePhotoMetadata photoMetadata){
+//        Task<PlacePhotoResponse> photoResponse = mGeoDataClientl.getPhoto()
+//    }
 
 
     private void getBarInfo(String url) {

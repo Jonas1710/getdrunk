@@ -1,6 +1,16 @@
 package com.example.bmollj.getdrunk.helper;
 
+import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+
 import com.example.bmollj.getdrunk.model.Bar;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.PlacePhotoResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +22,8 @@ import java.util.List;
 
 public class BarJsonParser {
 
+
+
     public static List<Bar> createBarFromJsonString(String barJsonString) throws JSONException {
         List<Bar> bars = new ArrayList<>();
         JSONObject jsonObj = new JSONObject(barJsonString);
@@ -22,6 +34,10 @@ public class BarJsonParser {
             Bar bar = new Bar();
             JSONObject obj = results.getJSONObject(i);
             bar.setName(obj.getString("name"));
+//            bar.setPlaceId(obj.getString("place_id"));
+//            bar.setPhotoreference(obj.getString("photo_reference"));
+
+
 //            bar.setId(obj.getString("id"));
 //            bar.setBewertung(Float.parseFloat(obj.getString("rating")));
            bars.add(bar);
@@ -32,4 +48,6 @@ public class BarJsonParser {
 
         return bars;
     }
+
+
 }
