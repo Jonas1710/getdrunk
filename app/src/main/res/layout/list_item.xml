@@ -1,19 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <!-- Definig a container for you List Item-->
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:gravity="center_vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black">
 
-        <!-- Defining where should text be placed. You set you text color here-->
-        <TextView
-            android:id="@+id/list_content"
-            android:textColor="#000000"
-            android:gravity="center"
-            android:text="sample"
-            android:layout_margin="4dip"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
-    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/barBild"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:srcCompat="@android:color/black" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Name"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/open"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/open"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Open"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/bewertung"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtZeit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Öffnungszeit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/open"
+        app:layout_constraintStart_toEndOf="@+id/open"
+        app:layout_constraintTop_toTopOf="@+id/open" />
+
+
+    <RatingBar
+        android:id="@+id/bewertung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/barBild"
+
+        />
+</android.support.constraint.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.bmollj.getdrunk;
 
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,6 +16,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +29,7 @@ import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleCursorAdapter;
@@ -38,9 +42,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.bmollj.getdrunk.helper.BarJsonParser;
+import com.example.bmollj.getdrunk.helper.BarListAdapter;
 import com.example.bmollj.getdrunk.model.Bar;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,21 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void addBarsToList(){
-        ListView barsList = findViewById(R.id.bars_overview_list);
-        ArrayAdapter<Bar> barAdapter = new ArrayAdapter<>(getApplicationContext() , android.R.layout.simple_list_item_1);
-
-        barAdapter.addAll();
-
-        for(int i=0; i<barsList.getChildCount(); i++){
-
-        }
-        barsList.setAdapter(barAdapter);
-
-    }
-
-
     private void getBarInfo(String url) {
+        final Context context = getApplicationContext();
         //Infos Adapter Initialisieren
         final ArrayAdapter<Bar> barInfosAdapter = new ArrayAdapter<Bar>(getApplicationContext(), android.R.layout.simple_list_item_1){
             //Farbe der Schrift auf Weiss setzen
@@ -122,10 +117,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Bar bar = BarJsonParser.createBarFromJsonString(response);
-                            barInfosAdapter.addAll(bar);
-                            ListView barInfoList = findViewById(R.id.bars_overview_list);
-                            barInfoList.setAdapter(barInfosAdapter);
+
+                            RecyclerView barInfoList = findViewById(R.id.barList);
+                            ArrayList<Bar> bars = BarJsonParser.createBarFromJsonString(response);
+                            barInfosAdapter.addAll(bars);
+                            BarListAdapter barListAdapter = new BarListAdapter(bars);
+                            barInfoList.setAdapter(barListAdapter);
+                            barInfoList.setLayoutManager(new LinearLayoutManager(context));
                             progressBar.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             generateAlertDialog();

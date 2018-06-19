@@ -1,10 +1,11 @@
 package com.example.bmollj.getdrunk.model;
 
+import com.example.bmollj.getdrunk.R;
+
 public class Bar {
     private int id;
     private String name;
     private boolean isOpen;
-    private int oeffnungZeit;
     private int schliessungsZeit;
     private double bewertung;
     private int entfernung;
@@ -15,11 +16,11 @@ public class Bar {
     public Bar() {
     }
 
-    public Bar(int id, String name, boolean isOpen, int oeffnungZeit, int schliessungsZeit, double bewertung, int entfernung) {
+    public Bar(int id, String name, boolean isOpen, int schliessungsZeit, double bewertung, int entfernung) {
         this.id = id;
         this.name = name;
         this.isOpen = isOpen;
-        this.oeffnungZeit = oeffnungZeit;
+
         this.schliessungsZeit = schliessungsZeit;
         this.bewertung = bewertung;
         this.entfernung = entfernung;
@@ -27,15 +28,10 @@ public class Bar {
 
     @Override
     public String toString() {
-        return "Bar{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isOpen=" + isOpen +
-                ", oeffnungZeit=" + oeffnungZeit +
-                ", schliessungsZeit=" + schliessungsZeit +
-                ", bewertung=" + bewertung +
-                ", entfernung=" + entfernung +
-                '}';
+        return name + "\n"+
+
+                ", oeffnungZeit=" +
+                ", bewertung=" + bewertung;
     }
 
     public int getId() {
@@ -54,20 +50,18 @@ public class Bar {
         this.name = name;
     }
 
-    public boolean isOpen() {
-        return isOpen;
+    public String isOpen() {
+        if(isOpen){
+            return "open";
+        }
+        else{
+            return "closed";
+        }
+
     }
 
     public void setOpen(boolean open) {
         isOpen = open;
-    }
-
-    public int getOeffnungZeit() {
-        return oeffnungZeit;
-    }
-
-    public void setOeffnungZeit(int oeffnungZeit) {
-        this.oeffnungZeit = oeffnungZeit;
     }
 
     public int getSchliessungsZeit() {
