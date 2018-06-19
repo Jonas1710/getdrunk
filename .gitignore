@@ -12,7 +12,7 @@
 bin/
 gen/
 out/
-
+S
 # Gradle files
 .gradle/
 build/

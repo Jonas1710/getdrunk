@@ -38,6 +38,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.bmollj.getdrunk.helper.BarJsonParser;
 import com.example.bmollj.getdrunk.helper.BarListAdapter;
 import com.example.bmollj.getdrunk.helper.BarListAdapter;
+import com.example.bmollj.getdrunk.helper.CustomItemClickListener;
 import com.example.bmollj.getdrunk.model.Bar;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlacePhotoMetadata;
@@ -134,9 +135,18 @@ public class MainActivity extends AppCompatActivity {
                         try {
 
 
-                            ArrayList<Bar> bars = BarJsonParser.createBarFromJsonString(response);
+                            final ArrayList<Bar> bars = BarJsonParser.createBarFromJsonString(response);
                             barInfosAdapter.addAll(bars);
-                            BarListAdapter barListAdapter = new BarListAdapter(bars);
+                            BarListAdapter barListAdapter = new BarListAdapter(bars, new CustomItemClickListener() {
+                                @Override
+                                public void onItemClick(View v, int position) {
+                                    Intent intent = new Intent(v.getContext(), Detail.class);
+                                    Bar selected = bars.get(position);
+                                    intent.putExtra("String name",selected.getName());
+                                    startActivity(intent);
+
+                                }
+                            });
                             barInfoList.setAdapter(barListAdapter);
                             barInfoList.setLayoutManager(new LinearLayoutManager(context));
                             progressBar.setVisibility(View.GONE);
@@ -151,20 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
         queue.add(stringRequest);
 
-        AdapterView.OnItemClickListener mListClickedHandler = new
-                AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView parent, View v, int position, long id) {
-                        Intent intent = new Intent(getApplicationContext(), Detail.class);
-                        Bar selected = (Bar) parent.getItemAtPosition(position);
-                        intent.putExtra("id", selected.getId());
-                        intent.putExtra("name", selected.getName());
-                        intent.putExtra("bewertung", selected.getBewertung());
 
-                        startActivity(intent);
-                    }
-                };
-
-        barInfoList.OnClickListener(mListClickedHandler);
     }
 
     private void generateAlertDialog() {
