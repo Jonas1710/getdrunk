@@ -2,13 +2,30 @@ package com.example.bmollj.getdrunk.model;
 
 import com.example.bmollj.getdrunk.R;
 
+import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.location.places.GeoDataApi;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.PlacePhotoResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 public class Bar {
-    private int id;
+    private String id;
     private String name;
     private boolean isOpen;
     private int schliessungsZeit;
-    private double bewertung;
+    private float bewertung;
     private int entfernung;
+    private String placeId;
+    private String photoreference;
+    private float lat;
+    private float lng;
+
     //TODO
     //Standort und Bild hinzufügen
 
@@ -16,7 +33,7 @@ public class Bar {
     public Bar() {
     }
 
-    public Bar(int id, String name, boolean isOpen, int schliessungsZeit, double bewertung, int entfernung) {
+    public Bar(String id, String name, boolean isOpen, int schliessungsZeit, float bewertung, int entfernung) {
         this.id = id;
         this.name = name;
         this.isOpen = isOpen;
@@ -26,20 +43,50 @@ public class Bar {
         this.entfernung = entfernung;
     }
 
-    @Override
-    public String toString() {
-        return name + "\n"+
-
-                ", oeffnungZeit=" +
-                ", bewertung=" + bewertung;
+    public float getLat() {
+        return lat;
     }
 
-    public int getId() {
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
+    }
+
+    @Override
+    public String toString() {
+        return "Bar{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", isOpen=" + isOpen +
+                ", schliessungsZeit=" + schliessungsZeit +
+                ", bewertung=" + bewertung +
+                ", entfernung=" + entfernung +
+                ", placeId='" + placeId + '\'' +
+                ", photoreference='" + photoreference + '\'' +
+                '}';
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPhotoreference() {
+        return photoreference;
+    }
+
+    public void setPhotoreference(String photoreference) {
+        this.photoreference = photoreference;
     }
 
     public String getName() {
@@ -72,11 +119,11 @@ public class Bar {
         this.schliessungsZeit = schliessungsZeit;
     }
 
-    public double getBewertung() {
+    public float getBewertung() {
         return bewertung;
     }
 
-    public void setBewertung(double bewertung) {
+    public void setBewertung(float bewertung) {
         this.bewertung = bewertung;
     }
 
@@ -87,6 +134,16 @@ public class Bar {
     public void setEntfernung(int entfernung) {
         this.entfernung = entfernung;
     }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+
 
 
 }

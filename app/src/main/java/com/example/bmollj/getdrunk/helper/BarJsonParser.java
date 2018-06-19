@@ -1,6 +1,16 @@
 package com.example.bmollj.getdrunk.helper;
 
+import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+
 import com.example.bmollj.getdrunk.model.Bar;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
+import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
+import com.google.android.gms.location.places.PlacePhotoResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,29 +28,16 @@ public class BarJsonParser {
         JSONArray results = jsonObj.getJSONArray("results");
 
 
-
         for (int i = 0; i < results.length(); i++) {
             Bar bar = new Bar();
             JSONObject obj = results.getJSONObject(i);
             bar.setName(obj.getString("name"));
-            bar.setId(0);
-
-            try{
-                bar.setOpen(obj.getBoolean("open_now"));
-                bar.setBewertung(obj.getDouble("rating"));
-
-            }
-            catch (Exception e){
-
-            }
-
-            //bar.setEntfernung(obj.getInt("entfernung"));
-            //bar.setOeffnungZeit(obj.getInt("opening_hours"));
+//            bar.setPlaceId(obj.getString("place_id"));
+//            bar.setPhotoreference(obj.getString("photo_reference"));
 
 
-
-           /* bar.setId(Integer.parseInt(obj.getString("id")));
-            bar.setBewertung(Double.parseDouble(obj.getString("rating")));*/
+//            bar.setId(obj.getString("id"));
+//            bar.setBewertung(Float.parseFloat(obj.getString("rating")));
            bars.add(bar);
         }
 

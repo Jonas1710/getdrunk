@@ -5,13 +5,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.provider.ContactsContract;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +22,7 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -43,7 +37,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.bmollj.getdrunk.helper.BarJsonParser;
 import com.example.bmollj.getdrunk.helper.BarListAdapter;
+import com.example.bmollj.getdrunk.helper.BarListAdapter;
 import com.example.bmollj.getdrunk.model.Bar;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlacePhotoMetadata;
+
 
 import org.json.JSONException;
 
@@ -54,11 +52,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ProgressBar progressBar;
-    private String GOOGLE_PLACES_API_RADIUS = "&radius=2000";
+    private ImageView imageView;
+    private GeoDataClient mGeoDataClient;
+    private List<Bar> bars = new ArrayList<>();
+    private Bar bar = new Bar();
+    private List<PlacePhotoMetadata> photoDataList;
+    private int currentPotoIndex = 0;
+    private String GOOGLE_PLACES_API_RADIUS = "&radius=";
     private static final String GOOGLE_PLACES_API_TYPE ="&type=bar";
     private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639";
     private static final String GOOGLE_PLACES_API_KEY = "?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs";
     private static final String GOOGLE_PLACES_API_NEARBYSEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+    private static final String GOOGLE_PLACES_API_PICTURES = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs&maxwidth=400&maxheight=400&photoreference=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.loading_bars_overview_progress);
         progressBar.setVisibility(View.VISIBLE);
+        String radius = "2000";
+        GOOGLE_PLACES_API_RADIUS += radius;
         getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION +GOOGLE_PLACES_API_RADIUS + GOOGLE_PLACES_API_TYPE);
 
 
@@ -80,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -90,8 +98,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+//    private void getPhoto(PlacePhotoMetadata photoMetadata){
+//        Task<PlacePhotoResponse> photoResponse = mGeoDataClientl.getPhoto()
+//    }
+
+
     private void getBarInfo(String url) {
         final Context context = getApplicationContext();
+        final RecyclerView barInfoList = findViewById(R.id.barList);
         //Infos Adapter Initialisieren
         final ArrayAdapter<Bar> barInfosAdapter = new ArrayAdapter<Bar>(getApplicationContext(), android.R.layout.simple_list_item_1){
             //Farbe der Schrift auf Weiss setzen
@@ -112,13 +126,14 @@ public class MainActivity extends AppCompatActivity {
         };
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
 
-                            RecyclerView barInfoList = findViewById(R.id.barList);
+
                             ArrayList<Bar> bars = BarJsonParser.createBarFromJsonString(response);
                             barInfosAdapter.addAll(bars);
                             BarListAdapter barListAdapter = new BarListAdapter(bars);
@@ -135,6 +150,21 @@ public class MainActivity extends AppCompatActivity {
                 generateAlertDialog();         }     });
 
         queue.add(stringRequest);
+
+        AdapterView.OnItemClickListener mListClickedHandler = new
+                AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView parent, View v, int position, long id) {
+                        Intent intent = new Intent(getApplicationContext(), Detail.class);
+                        Bar selected = (Bar) parent.getItemAtPosition(position);
+                        intent.putExtra("id", selected.getId());
+                        intent.putExtra("name", selected.getName());
+                        intent.putExtra("bewertung", selected.getBewertung());
+
+                        startActivity(intent);
+                    }
+                };
+
+        barInfoList.OnClickListener(mListClickedHandler);
     }
 
     private void generateAlertDialog() {
