@@ -23,7 +23,7 @@ public class Detail extends AppCompatActivity {
     private int id;
     private String offen;
     private String geschlossen;
-
+    private String name;
     private CheckBox isOpen;
     private String schliessungsZeit;
     private TextView entfernung;
@@ -53,9 +53,9 @@ public class Detail extends AppCompatActivity {
         ratingBar.setRating(bewertung);
         isOpen.setChecked(intent.getBooleanExtra("isOpen", false));
         oeffnungszeiten.setText(offen+"-"+geschlossen);
-        entfernung.setText(intent.getStringExtra("entfernung"));
+        entfernung.setText(intent.getStringExtra("entfernu"));
 
-        String name = intent.getStringExtra("name");
+        name = intent.getStringExtra("name");
 
         ratingBar.setRating(bewertung);
 
@@ -69,13 +69,16 @@ public class Detail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Bar bar = new Bar();
+                bar.setName(name);
+                bar.setLat(intent.getDoubleExtra("lat", 0));
+                bar.setLng(intent.getDoubleExtra("lng", 0));
 
                // Create a Uri from an intent string. Use the result to create an Intent.
 
 
 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
 Intent mapIntent = new Intent(Detail.this, Map.class);
-
+mapIntent.putExtra("name", bar.getName());
 mapIntent.putExtra("lat",bar.getLat());
 mapIntent.putExtra("lng", bar.getLng());
 // Make the Intent explicit by setting the Google Maps package

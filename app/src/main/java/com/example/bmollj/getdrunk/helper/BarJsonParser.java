@@ -41,6 +41,9 @@ public class BarJsonParser {
                 bar.setBewertung(Float.parseFloat(obj.getString("rating")));
             }
             bar.setOpen(Boolean.parseBoolean("open_now"));
+
+            bar.setLat(results.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lat"));
+            bar.setLng(results.getJSONObject(i).getJSONObject("geometry").getJSONObject("location").getDouble("lng"));
             //bar.setSchliessungsZeit(Integer.parseInt(""));
             //bar.setOeffnungszeit(Integer.parseInt(""));
            bars.add(bar);
