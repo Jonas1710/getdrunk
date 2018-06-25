@@ -49,7 +49,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
 
     private ProgressBar progressBar;
@@ -133,20 +133,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-
-
                             final ArrayList<Bar> bars = BarJsonParser.createBarFromJsonString(response);
-                            barInfosAdapter.addAll(bars);
-                            BarListAdapter barListAdapter = new BarListAdapter(bars, new CustomItemClickListener() {
-                                @Override
-                                public void onItemClick(View v, int position) {
-                                    Intent intent = new Intent(v.getContext(), Detail.class);
-                                    Bar selected = bars.get(position);
-                                    intent.putExtra("String name",selected.getName());
-                                    startActivity(intent);
 
-                                }
-                            });
+                            barInfosAdapter.addAll(bars);
+                            BarListAdapter barListAdapter = new BarListAdapter(bars);
+
                             barInfoList.setAdapter(barListAdapter);
                             barInfoList.setLayoutManager(new LinearLayoutManager(context));
                             progressBar.setVisibility(View.GONE);
@@ -178,4 +169,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
     }
+
+
 }
