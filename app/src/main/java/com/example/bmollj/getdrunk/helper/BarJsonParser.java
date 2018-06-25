@@ -36,8 +36,13 @@ public class BarJsonParser {
 //            bar.setPhotoreference(obj.getString("photo_reference"));
 
 
-//            bar.setId(obj.getString("id"));
-//            bar.setBewertung(Float.parseFloat(obj.getString("rating")));
+            bar.setId(obj.getString("id"));
+            if(obj.has("rating")) {
+                bar.setBewertung(Float.parseFloat(obj.getString("rating")));
+            }
+            bar.setOpen(Boolean.parseBoolean("open_now"));
+            //bar.setSchliessungsZeit(Integer.parseInt(""));
+            //bar.setOeffnungszeit(Integer.parseInt(""));
            bars.add(bar);
         }
 

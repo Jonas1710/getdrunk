@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -19,10 +20,12 @@ import com.example.bmollj.getdrunk.model.Bar;
 import java.util.ArrayList;
 
 public class BarListAdapter extends RecyclerView.Adapter<BarListAdapter.BarViewHolder> implements View.OnClickListener {
-    private ArrayList<Bar> bars = new ArrayList<>();
+    ArrayList<Bar> bars;
     CustomItemClickListener clickListener;
-
+    private int barIndex = 0;
     Context context;
+
+    public BarListAdapter() {}
 
     public BarListAdapter(ArrayList<Bar> bars) {
         this.bars = bars;
@@ -35,7 +38,8 @@ public class BarListAdapter extends RecyclerView.Adapter<BarListAdapter.BarViewH
         LayoutInflater inflater = LayoutInflater.from(context);
         View barView = inflater.inflate(R.layout.list_item, parent, false);
 
-        BarViewHolder barViewHolder = new BarViewHolder(barView);
+        BarViewHolder barViewHolder = new BarViewHolder(barView, bars.get(barIndex));
+        barIndex++;
         return barViewHolder;
     }
 
@@ -60,8 +64,11 @@ public class BarListAdapter extends RecyclerView.Adapter<BarListAdapter.BarViewH
                 Bar selected = bars.get(position);
                 intent.putExtra("id", selected.getId());
                 intent.putExtra("name", selected.getName());
+                intent.putExtra("isOpen", selected.isOpen());
+                intent.putExtra("entfernung", selected.getEntfernung());
+                intent.putExtra("oeffnungszeit", selected.getOeffnungszeit());
                 intent.putExtra("bewertung", selected.getBewertung());
-
+                intent.putExtra("schliessungszeit", selected.getSchliessungsZeit());
                 v.getContext().startActivity(intent);
             }
         };
@@ -77,6 +84,10 @@ public class BarListAdapter extends RecyclerView.Adapter<BarListAdapter.BarViewH
         this.clickListener = itemClickListener;
     }
 
+    public void addAll(ArrayList<Bar> bars) {
+        this.bars.addAll(bars);
+    }
+
     public class BarViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView barName;
         TextView isOpen;
@@ -84,12 +95,16 @@ public class BarListAdapter extends RecyclerView.Adapter<BarListAdapter.BarViewH
         RatingBar barRating;
         private Context context;
 
-        public BarViewHolder(View itemView) {
+        public BarViewHolder(View itemView, Bar bar) {
             super(itemView);
             itemView.setOnClickListener(this);
+            int viewId = (int) this.getItemId();
             barName = (TextView) itemView.findViewById(R.id.name);
+            barName.setText(bar.getName());
             isOpen = (TextView) itemView.findViewById(R.id.open);
+            isOpen.setText(bar.isOpen());
             barRating = (RatingBar) itemView.findViewById(R.id.bewertung);
+            barRating.setRating(bar.getBewertung());
         }
 
 
@@ -99,10 +114,6 @@ public class BarListAdapter extends RecyclerView.Adapter<BarListAdapter.BarViewH
 
 
         }
-
-
     }
-
-
 }
 

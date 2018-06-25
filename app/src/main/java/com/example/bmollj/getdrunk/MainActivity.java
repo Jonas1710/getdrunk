@@ -49,18 +49,19 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
 
     private ProgressBar progressBar;
     private ImageView imageView;
     private GeoDataClient mGeoDataClient;
-    private List<Bar> bars = new ArrayList<>();
+    private ArrayList<Bar> bars = new ArrayList<>();
     private Bar bar = new Bar();
     private List<PlacePhotoMetadata> photoDataList;
+    private BarListAdapter barListAdapter;
     private int currentPotoIndex = 0;
     private String GOOGLE_PLACES_API_RADIUS = "&radius=";
-    private static final String GOOGLE_PLACES_API_TYPE ="&type=bar";
+    private static final String GOOGLE_PLACES_API_TYPE = "&type=bar";
     private static final String GOOGLE_PLACES_API_LOCATION = "&location=46.939667,7.398639";
     private static final String GOOGLE_PLACES_API_KEY = "?key=AIzaSyAxVuj47QokNKnGvKIkDDVxdodqAIr52Rs";
     private static final String GOOGLE_PLACES_API_NEARBYSEARCH = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
@@ -74,16 +75,16 @@ public class MainActivity extends AppCompatActivity{
         progressBar.setVisibility(View.VISIBLE);
         String radius = "2000";
         GOOGLE_PLACES_API_RADIUS += radius;
-        getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION +GOOGLE_PLACES_API_RADIUS + GOOGLE_PLACES_API_TYPE);
-
-
+        getBarInfo(GOOGLE_PLACES_API_NEARBYSEARCH + GOOGLE_PLACES_API_KEY + GOOGLE_PLACES_API_LOCATION + GOOGLE_PLACES_API_RADIUS + GOOGLE_PLACES_API_TYPE);
+        RecyclerView barInfoList = findViewById(R.id.barList);
+        barListAdapter = new BarListAdapter(bars);
+        barInfoList.setLayoutManager(new LinearLayoutManager(this));
+        barInfoList.setAdapter(barListAdapter);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-
 
 
     }
@@ -98,7 +99,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
 //    private void getPhoto(PlacePhotoMetadata photoMetadata){
 //        Task<PlacePhotoResponse> photoResponse = mGeoDataClientl.getPhoto()
 //    }
@@ -106,25 +106,8 @@ public class MainActivity extends AppCompatActivity{
 
     private void getBarInfo(String url) {
         final Context context = getApplicationContext();
-        final RecyclerView barInfoList = findViewById(R.id.barList);
         //Infos Adapter Initialisieren
-        final ArrayAdapter<Bar> barInfosAdapter = new ArrayAdapter<Bar>(getApplicationContext(), android.R.layout.simple_list_item_1){
-            //Farbe der Schrift auf Weiss setzen
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent){
-                // Get the Item from ListView
-                View view = super.getView(position, convertView, parent);
 
-                // Initialize a TextView for ListView each Item
-                TextView bar = view.findViewById(android.R.id.text1);
-
-                // Set the text color of TextView (ListView Item)
-                bar.setTextColor(Color.WHITE);
-
-                // Generate ListView Item using TextView
-                return view;
-            }
-        };
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
 
@@ -133,26 +116,23 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onResponse(String response) {
                         try {
-                            final ArrayList<Bar> bars = BarJsonParser.createBarFromJsonString(response);
-
-                            barInfosAdapter.addAll(bars);
-                            BarListAdapter barListAdapter = new BarListAdapter(bars);
-
-                            barInfoList.setAdapter(barListAdapter);
-                            barInfoList.setLayoutManager(new LinearLayoutManager(context));
+                            bars = BarJsonParser.createBarFromJsonString(response);
+                            barListAdapter.addAll(bars);
+                            barListAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
                         } catch (JSONException e) {
                             generateAlertDialog();
                         }
 
-                    }             }, new Response.ErrorListener() {
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                generateAlertDialog();         }     });
+                generateAlertDialog();
+            }
+        });
 
         queue.add(stringRequest);
-
-
     }
 
     private void generateAlertDialog() {

@@ -18,6 +18,7 @@ public class Bar {
     private String id;
     private String name;
     private boolean isOpen;
+    private int oeffnungszeit;
     private int schliessungsZeit;
     private float bewertung;
     private int entfernung;
@@ -33,11 +34,11 @@ public class Bar {
     public Bar() {
     }
 
-    public Bar(String id, String name, boolean isOpen, int schliessungsZeit, float bewertung, int entfernung) {
+    public Bar(String id, String name, boolean isOpen,int oeffnungszeit, int schliessungsZeit, float bewertung, int entfernung) {
         this.id = id;
         this.name = name;
         this.isOpen = isOpen;
-
+        this.oeffnungszeit = oeffnungszeit;
         this.schliessungsZeit = schliessungsZeit;
         this.bewertung = bewertung;
         this.entfernung = entfernung;
@@ -143,7 +144,9 @@ public class Bar {
         this.placeId = placeId;
     }
 
+    public int getOeffnungszeit() {
+        return oeffnungszeit;
+    }
 
-
-
+    public void setOeffnungszeit(int oeffnungszeit){this.oeffnungszeit = oeffnungszeit;}
 }
