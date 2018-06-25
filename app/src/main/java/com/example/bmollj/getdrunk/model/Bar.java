@@ -1,19 +1,5 @@
 package com.example.bmollj.getdrunk.model;
 
-import com.example.bmollj.getdrunk.R;
-
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.location.places.GeoDataApi;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
-import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
-import com.google.android.gms.location.places.PlacePhotoResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
 public class Bar {
     private String id;
     private String name;
@@ -24,8 +10,8 @@ public class Bar {
     private int entfernung;
     private String placeId;
     private String photoreference;
-    private float lat;
-    private float lng;
+    private double lat;
+    private double lng;
 
     //TODO
     //Standort und Bild hinzufügen
@@ -44,19 +30,19 @@ public class Bar {
         this.entfernung = entfernung;
     }
 
-    public float getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(float lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public float getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(float lng) {
+    public void setLng(double lng) {
         this.lng = lng;
     }
 
