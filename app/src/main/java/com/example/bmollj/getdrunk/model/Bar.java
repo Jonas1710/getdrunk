@@ -1,19 +1,5 @@
 package com.example.bmollj.getdrunk.model;
 
-import com.example.bmollj.getdrunk.R;
-
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.location.places.GeoDataApi;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlacePhotoMetadata;
-import com.google.android.gms.location.places.PlacePhotoMetadataBuffer;
-import com.google.android.gms.location.places.PlacePhotoMetadataResponse;
-import com.google.android.gms.location.places.PlacePhotoResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
 public class Bar {
     private String id;
     private String name;

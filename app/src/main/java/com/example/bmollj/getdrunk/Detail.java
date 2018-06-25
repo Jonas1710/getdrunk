@@ -53,7 +53,7 @@ public class Detail extends AppCompatActivity {
         ratingBar.setRating(bewertung);
         isOpen.setChecked(intent.getBooleanExtra("isOpen", false));
         oeffnungszeiten.setText(offen+"-"+geschlossen);
-        entfernung.setText(intent.getStringExtra("entfernu"));
+        entfernung.setText(intent.getStringExtra("entfernung"));
 
         name = intent.getStringExtra("name");
 
